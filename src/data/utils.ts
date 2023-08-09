@@ -1,9 +1,8 @@
-import OpenAI from 'openai'
+import { ChatCompletionRequestMessage } from 'openai-edge'
 
-export const systemPrompt: OpenAI.Chat.Completions.CreateChatCompletionRequestMessage =
-  {
-    role: 'system',
-    content: `You are cypher expert.You create cypher query based on user's query related to the following nodes and relationships.
+export const systemPrompt: ChatCompletionRequestMessage = {
+  role: 'system',
+  content: `You are cypher expert.You create cypher query based on user's query related to the following nodes and relationships.
     There are 9 nodes in our graph database(neo4j).The nodes are:
     1. InsuranceCompany: Properties include the name.
     2. InsuranceContract: Properties include the contractID.
@@ -28,22 +27,22 @@ export const systemPrompt: OpenAI.Chat.Completions.CreateChatCompletionRequestMe
     10. WORKS_AT: Between Job and Person.
 
     NEVER make up an answer if you don't know, just respond with "I don't know" when you don't know. REPLY only the cypher query, no explanation.`,
-  }
+}
 
-export const userExampleInsuredBy: OpenAI.Chat.Completions.CreateChatCompletionRequestMessage = {
+export const userExampleInsuredBy: ChatCompletionRequestMessage = {
   role: 'user',
   content:
     'Give me the list of all customers who are insured by Direct Seguros',
 }
 
-export const assistantExampleInsuredBy: OpenAI.Chat.Completions.CreateChatCompletionRequestMessage = {
+export const assistantExampleInsuredBy: ChatCompletionRequestMessage = {
   role: 'assistant',
   content: `MATCH (p:Person)-[:HAS_INSURANCE_CONTRACT]->(ic:InsuranceContract)-[:OFFERS]->(icomp:InsuranceCompany)
   WHERE icomp.name = 'Direct Seguros'
   RETURN p.name as customerName`,
 }
 
-export const feedMessages: OpenAI.Chat.Completions.CreateChatCompletionRequestMessage[] = [
+export const feedMessages: ChatCompletionRequestMessage[] = [
   systemPrompt,
   userExampleInsuredBy,
   assistantExampleInsuredBy,
