@@ -10,7 +10,8 @@ export default function Home() {
     useChat({
       api: '/api/chat',
     })
-  console.log('messages' + messages)
+
+  console.log('🚀 ~ file: page.tsx:10 ~ Home ~ messages:', messages)
   return (
     <main className='flex min-h-screen flex-col bg-black text-black dark:bg-slate-900 dark:text-white'>
       <div className='mb-10 border-b-[1px] border-white/40 p-10'>
@@ -24,10 +25,10 @@ export default function Home() {
             ) : error ? (
               <div className='m-10 leading-6'>
                 {error.message}
-                <p>{JSON.stringify(error.cause)}</p>
+                {/* <p>{JSON.stringify(error.cause)}</p> */}
               </div>
             ) : (
-              <div>
+              <div className='p-2'>
                 {messages.map(m => (
                   <div key={m.id}>
                     {m.role}: {m.content}

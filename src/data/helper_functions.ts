@@ -1,5 +1,4 @@
 import neo4j from 'neo4j-driver';
-import OpenAI from 'openai';
 
 const driver = neo4j.driver(
   process.env.NEO4J_URI ?? '',
@@ -10,7 +9,7 @@ const driver = neo4j.driver(
 )
 
 export async function extractCyperQueryFromGpt(
-  result: OpenAI.Chat.Completions.ChatCompletion.Choice.Message
+  result: Response
 ): Promise<{ isQuery: boolean; query: string }> {
   let message: { content: '' } = { content: '' }
   const cypherFunction = [
@@ -46,11 +45,23 @@ export async function extractCyperQueryFromGpt(
     'WITH',
   ]
 
-  const findings = cypherFunction.find(
-    tag => result.content?.toString().includes(tag)
-  )
+  try {
+    const jsonData = await result.json()
+    console.log('🚀 ~ file: helper_functions.ts:51 ~ jsonData:', jsonData)
+    try {
+      message = await jsonData.choices[0].message
+      console.log('🚀 ~ file: helper_functions.ts:54 ~ message:', message)
+    } catch (error) {
+      return { isQuery: false, query: JSON.stringify(error) }
+    }
 
-  return { query: message.content, isQuery: findings ? true : false }
+    const findings = cypherFunction.find(tag => message.content.includes(tag))
+    console.log('🚀 ~ file: helper_functions.ts:60 ~ findings:', findings)
+
+    return { query: message.content, isQuery: findings ? true : false }
+  } catch (error) {
+    return { query: JSON.stringify(error), isQuery: false }
+  }
 }
 
 export function neo4jStream(
