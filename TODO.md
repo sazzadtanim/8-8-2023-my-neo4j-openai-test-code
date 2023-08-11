@@ -1,6 +1,6 @@
 My todolist:
 
-1. receive data as nodes and edges from neo4j
+1. Convert Neo4j data to standardized JSON format suitable for graph visualization. ✅
    1.1 modify chatgpt prompt
    1.2 modify neo4j cypher query
 2. provide data to show graph

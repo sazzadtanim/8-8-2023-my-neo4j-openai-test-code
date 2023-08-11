@@ -1,6 +1,4 @@
-import { GraphAPIData } from './typings'
-
-export const myJson: GraphAPIData[] = [
+export const myJson = [
   {
     source: {
       identity: 0,
